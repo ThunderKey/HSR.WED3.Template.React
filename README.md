@@ -21,6 +21,8 @@ You will also see any lint errors in the console.
 
 The code only provides a minimal but functional skeleton of the application. It does not use any widget library, you're free to choose your own or none at all. The code also is not structured very well, please fix that.
 
+If you don't want to start the server locally, you can also adjust `api.js` and set the backend url to `https://wed3-server.herokuapp.com`.
+
 ## Visual Studio Code Setup
 
 The template already contains the configuration for Visual Studio Code. If Flow is used, the corresponding extension `flowtype.flow-for-vscode` needs to be installed. I'd also recommend to install the ESLint plug-in `dbaeumer.vscode-eslint` as well as Prettier `esbenp.prettier-vscode` for automatic formatting.
