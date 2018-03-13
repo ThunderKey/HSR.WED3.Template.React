@@ -31,8 +31,8 @@ type State = {
 class App extends React.Component<{}, State> {
   constructor(props: any) {
     super(props);
-    const token = sessionStorage.getItem("token");
-    const user = sessionStorage.getItem("user");
+    const token = localStorage.getItem("token");
+    const user = localStorage.getItem("user");
     if (token && user) {
       this.state = {
         isAuthenticated: true,
@@ -57,8 +57,8 @@ class App extends React.Component<{}, State> {
       .login(login, password)
       .then(({ token, owner }) => {
         this.setState({ isAuthenticated: true, token, user: owner });
-        sessionStorage.setItem("token", token);
-        sessionStorage.setItem("user", JSON.stringify(owner));
+        localStorage.setItem("token", token);
+        localStorage.setItem("user", JSON.stringify(owner));
         cb(null);
       })
       .catch(error => cb(error));
@@ -70,8 +70,8 @@ class App extends React.Component<{}, State> {
       token: undefined,
       user: undefined
     });
-    sessionStorage.removeItem("token");
-    sessionStorage.removeItem("user");
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
     callback();
   };
 
