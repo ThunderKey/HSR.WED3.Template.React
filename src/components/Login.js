@@ -27,6 +27,27 @@ class Login extends React.Component<Props, *> {
     redirectToReferrer: false
   };
 
+
+  getErrorForPassword  = () => {
+    const password = this.state.password;
+    if(password.length === 0){
+      return "Passwort is empty!";
+    }
+    if(password.length <= 3){
+      return "Password too short!";
+    }
+  };
+
+  getErrorForLogin = () =>{
+    const login = this.state.login;
+    if(login.length === 0){
+      return "Username is empty!";
+    }
+    if(login.length <=3){
+      return "Username too short!";
+    }
+  };
+
   handleLoginChanged = (event: Event) => {
     if (event.target instanceof HTMLInputElement) {
       this.setState({ login: event.target.value });
@@ -71,12 +92,16 @@ class Login extends React.Component<Props, *> {
             placeholder="Login"
             value={this.state.login}
           />
+           <p>{this.getErrorForLogin()}</p>
+
           <input
             onChange={this.handlePasswordChanged}
             placeholder="Password"
             type="password"
             value={this.state.password}
           />
+          <p> {this.getErrorForPassword()} </p>
+
           <button onClick={this.handleSubmit}>Log-in</button>
         </form>
         {error && <p>Es ist ein Fehler aufgetreten!</p>}
