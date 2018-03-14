@@ -5,6 +5,22 @@ import { Redirect } from "react-router-dom";
 
 import { signup } from "../api";
 
+export type Props = {
+  /* Callback to submit an authentication request to the server */
+  authenticate: (
+    login: string,
+    password: string,
+    callback: (error: ?Error) => void
+  ) => void,
+  /* We need to know what page the user tried to access so we can
+     redirect after logging in */
+  location: {
+    state?: {
+      from: string
+    }
+  }
+};
+
 class Signup extends React.Component<{}, *> {
   state = {
     login: "",
@@ -32,13 +48,13 @@ class Signup extends React.Component<{}, *> {
   };
 
   errorForLogin = () => {
-    const login = this.state.login; 
+    const login = this.state.login;
     if(login.length === 0){
       return "Login is empty!";
-    } 
+    }
     if(login.length <= 3){
       return "Login is too short!";
-    } 
+    }
   }
 
   handleFirstNameChanged = (event: Event) => {
@@ -46,7 +62,7 @@ class Signup extends React.Component<{}, *> {
       this.setState({ firstname: event.target.value });
     }
   };
- 
+
   errorForFirstName = () => {
     const firstName = this.state.firstname;
     if(firstName.length === 0){
@@ -95,16 +111,25 @@ class Signup extends React.Component<{}, *> {
     signup(login, firstname, lastname, password)
       .then(result => {
         console.log("Signup result ", result);
-        this.setState({ redirectToReferrer: true, error: null });
+        this.props.authenticate(login, password, error => {
+          if(error) {
+            this.setState({ error });
+          } else {
+            this.setState({ redirectToReferrer: true, error: null });
+          }
+        });
       })
       .catch(error => this.setState({ error }));
   };
 
   render() {
+    const { from } = this.props.location.state || {
+      from: { pathname: "/dashboard" }
+    };
     const { redirectToReferrer, error } = this.state;
 
     if (redirectToReferrer) {
-      return <Redirect to="/login" />;
+      return <Redirect to={from} />;
     }
 
     return (
@@ -135,7 +160,7 @@ class Signup extends React.Component<{}, *> {
             placeholder="Passwort"
             type="password"
             value={this.state.password}
-          /> 
+          />
           <p>{this.errorForPassword()}</p>
           <button onClick={this.handleSubmit}>Account eröffnen</button>
         </form>

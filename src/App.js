@@ -122,7 +122,9 @@ class App extends React.Component<{}, State> {
               <Login {...props} authenticate={this.authenticate} />
             )}
           />
-          <Route path="/signup" component={Signup} />
+          <Route path="/signup" render={props => (
+              <Signup {...props} authenticate={this.authenticate} />
+            )}/>
           {/* 
             The following are protected routes that are only available for logged-in users. We also pass the user and token so 
             these components can do API calls. PrivateRoute is not part of react-router but our own implementation.
