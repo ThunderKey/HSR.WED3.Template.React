@@ -4,13 +4,12 @@ import React from "react";
 import {
   BrowserRouter as Router,
   Route,
-  Link,
-  withRouter
 } from "react-router-dom";
 
 import Home from "./components/Home";
 import Login from "./components/Login";
 import Signup from "./components/Signup";
+import MenuBar from "./components/MenuBar";
 
 import PrivateRoute from "./components/PrivateRoute";
 
@@ -78,37 +77,11 @@ class App extends React.Component<{}, State> {
   render() {
     const { isAuthenticated, user, token } = this.state;
 
-    const MenuBar = withRouter(({ history, location: { pathname } }) => {
-      if (isAuthenticated && user) {
-        return (
-          <nav>
-            <span>
-              {user.firstname} {user.lastname} &ndash; {user.accountNr}
-            </span>
-            {/* Links inside the App are created using the react-router's Link component */}
-            <Link to="/">Home</Link>
-            <Link to="/dashboard">Kontoübersicht</Link>
-            <Link to="/transactions">Zahlungen</Link>
-            <a
-              href="/logout"
-              onClick={event => {
-                event.preventDefault();
-                this.signout(() => history.push("/"));
-              }}
-            >
-              Logout {user.firstname} {user.lastname}
-            </a>
-          </nav>
-        );
-      } else {
-        return null;
-      }
-    });
 
     return (
       <Router>
         <div>
-          <MenuBar />
+          <MenuBar user={isAuthenticated && user} signout={this.signout} />
           <Route
             exact
             path="/"

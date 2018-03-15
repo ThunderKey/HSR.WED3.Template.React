@@ -110,7 +110,6 @@ class Signup extends React.Component<{}, *> {
     const { login, firstname, lastname, password } = this.state;
     signup(login, firstname, lastname, password)
       .then(result => {
-        console.log("Signup result ", result);
         this.props.authenticate(login, password, error => {
           if(error) {
             this.setState({ error });
