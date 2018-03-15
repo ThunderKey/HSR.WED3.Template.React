@@ -27,7 +27,7 @@ export type Transaction = {
   date: string
 };
 
-/* Use the exported functions to call the API. 
+/* Use the exported functions to call the API.
  * If necessary, adapt the backend address below:
  */
 

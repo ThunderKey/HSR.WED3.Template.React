@@ -10,7 +10,7 @@ export type Props = {
     password: string,
     callback: (error: ?Error) => void
   ) => void,
-  /* We need to know what page the user tried to access so we can 
+  /* We need to know what page the user tried to access so we can
      redirect after logging in */
   location: {
     state?: {
