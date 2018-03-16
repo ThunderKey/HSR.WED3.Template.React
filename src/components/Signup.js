@@ -2,7 +2,7 @@
 
 import React from "react";
 import { Redirect } from "react-router-dom";
-
+import { Header, Input, Button, Form, Segment } from 'semantic-ui-react'
 import { signup } from "../api";
 
 export type Props = {
@@ -115,7 +115,7 @@ class Signup extends React.Component<{}, *> {
   errorForPasswordAuthentification = () => {
 	  const passwordAuthentification = this.state.passwordAuthentification;
 	  if(passwordAuthentification !== this.state.password){
-		  return "PasswordAuthentification is failed!"
+		  return "Passwordauthentification is failed!"
 	  }
   }
 
@@ -147,47 +147,51 @@ class Signup extends React.Component<{}, *> {
 
     return (
       <div>
-        <h1>Bank of Rapperswil</h1>
-        <form>
-          <h2>Registrieren</h2>
-          <input
-            onChange={this.handleLoginChanged}
-            placeholder="Login"
-            value={this.state.login}
-          />
-          <p>{this.errorForLogin()}</p>
-          <input
-            onChange={this.handleFirstNameChanged}
-            placeholder="Vorname"
-            value={this.state.firstname}
-          />
-          <p>{this.errorForFirstName()}</p>
-          <input
-            onChange={this.handleLastNameChanged}
-            placeholder="Nachname"
-            value={this.state.lastname}
-          />
-          <p>{this.errorForLastName()} </p>
-          <input
-            onChange={this.handlePasswordChanged}
-            placeholder="Passwort"
-            type="password"
-            value={this.state.password}
-          />
-          <p>{this.errorForPassword()}</p>
-		  
-		  <input
-            onChange={this.handlePasswordAuthentificationChanged}
-            placeholder="Passwort"
-            type="password"
-            value={this.state.passwordAuthentification}
-          />
-		  
-		  <p>{this.errorForPasswordAuthentification()}</p>
-          <button onClick={this.handleSubmit}>Account eröffnen</button>
-        </form>
-        {error && <p>Es ist ein Fehler aufgetreten!</p>}
-      </div>
+        <Header as="h1">Bank of Rapperswil</Header>
+        <Form onSubmit={this.handleSubmit}>
+			<Segment stacked>
+          		<Header as="h2">Registrieren</Header>
+				<Form.Field>
+					<Input onChange={this.handleLoginChanged}
+						icon='user'	iconPosition='left'
+						placeholder="Login"
+						value={this.state.login} />
+				</Form.Field>
+				<p>{this.errorForLogin()}</p>
+				<Form.Field>
+					<Input onChange={this.handleFirstNameChanged}
+					icon='user'	iconPosition='left'
+					placeholder="Vorname"
+					value={this.state.firstname} />
+				</Form.Field>
+				<p>{this.errorForFirstName()}</p>
+				<Form.Field>
+					<Input onChange={this.handleLastNameChanged}
+					icon='user'	iconPosition='left'
+					placeholder="Nachname"
+					value={this.state.lastname} />
+				</Form.Field>
+				<p>{this.errorForLastName()} </p>
+				<Form.Field>
+					<Input onChange={this.handlePasswordChanged}
+					icon='lock'	iconPosition='left'
+					placeholder="Passwort" 
+					type="password"
+					value={this.state.password} />
+				</Form.Field>
+				<p>{this.errorForPassword()}</p>
+				<Form.Field>
+					<Input onChange={this.handlePasswordAuthentificationChanged}
+					icon='lock'	iconPosition='left'
+					placeholder="Passwort"  type="password"
+					value={this.state.passwordAuthentification} />
+				</Form.Field>
+				<p>{this.errorForPasswordAuthentification()}</p>
+				<Button fluid size='Large' content='Account eröffnen' color='teal' />
+				{error && <p>Es ist ein Fehler aufgetreten!</p>}
+			</Segment>
+        </Form>
+     </div>
     );
   }
 }
