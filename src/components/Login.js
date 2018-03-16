@@ -2,6 +2,7 @@
 
 import React from "react";
 import { Redirect, Link } from "react-router-dom";
+import { Header, Input, Button, Form, Segment } from 'semantic-ui-react'
 
 export type Props = {
   /* Callback to submit an authentication request to the server */
@@ -84,29 +85,35 @@ class Login extends React.Component<Props, *> {
 
     return (
       <div>
-        <h1>Bank of Rapperswil</h1>
-        <form>
-          <h2>Login</h2>
-          <input
-            onChange={this.handleLoginChanged}
-            placeholder="Login"
-            value={this.state.login}
-          />
-           <p>{this.getErrorForLogin()}</p>
+        <Header as="h1">Bank of Rapperswil</Header>
+        <Form onSubmit={this.handleSubmit}>
+			<Segment stacked>
+				<Header as="h2">Login</Header>
+			
+				<Form.Field>
+					<Input onChange={this.handleLoginChanged}
+						icon='user' iconPosition='left'
+						placeholder = 'Login'
+						value={this.state.login} />
+		
+				</Form.Field>
+				<p>{this.getErrorForLogin()}</p>
+				
+				<Form.Field>
+					<Input onChange={this.handlePasswordChanged}
+						icon='lock' iconPosition='left'
+						placeholder='Password' type='password' 
+						value={this.state.password} />
+				</Form.Field>
+				<p> {this.getErrorForPassword()} </p>
+						
+				<Button fluid size='Large' content='Log-in' color='teal' />
 
-          <input
-            onChange={this.handlePasswordChanged}
-            placeholder="Password"
-            type="password"
-            value={this.state.password}
-          />
-          <p> {this.getErrorForPassword()} </p>
-
-          <button onClick={this.handleSubmit}>Log-in</button>
-        </form>
-        {error && <p>Es ist ein Fehler aufgetreten!</p>}
-        <Link to="/signup">Noch keinen Account?</Link>
-      </div>
+        		{error && <p>Es ist ein Fehler aufgetreten!</p>}
+        		<Link to="/signup">Noch keinen Account?</Link>
+			</Segment>
+		</Form>
+		</div>
     );
   }
 }
