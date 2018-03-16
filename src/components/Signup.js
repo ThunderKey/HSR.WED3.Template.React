@@ -27,6 +27,7 @@ class Signup extends React.Component<{}, *> {
     firstname: "",
     lastname: "",
     password: "",
+	passwordAuthentification:"",
     error: null,
     redirectToReferrer: false
   };
@@ -105,6 +106,19 @@ class Signup extends React.Component<{}, *> {
     }
   };
 
+  handlePasswordAuthentificationChanged = (event: Event) => {
+    if (event.target instanceof HTMLInputElement) {
+      this.setState({ passwordAuthentification: event.target.value });
+    }
+  };
+ 
+  errorForPasswordAuthentification = () => {
+	  const passwordAuthentification = this.state.passwordAuthentification;
+	  if(passwordAuthentification !== this.state.password){
+		  return "PasswordAuthentification is failed!"
+	  }
+  }
+
   handleSubmit = (event: Event) => {
     event.preventDefault();
     const { login, firstname, lastname, password } = this.state;
@@ -161,6 +175,15 @@ class Signup extends React.Component<{}, *> {
             value={this.state.password}
           />
           <p>{this.errorForPassword()}</p>
+		  
+		  <input
+            onChange={this.handlePasswordAuthentificationChanged}
+            placeholder="Passwort"
+            type="password"
+            value={this.state.passwordAuthentification}
+          />
+		  
+		  <p>{this.errorForPasswordAuthentification()}</p>
           <button onClick={this.handleSubmit}>Account eröffnen</button>
         </form>
         {error && <p>Es ist ein Fehler aufgetreten!</p>}
