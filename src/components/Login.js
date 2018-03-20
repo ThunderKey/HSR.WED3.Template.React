@@ -82,33 +82,33 @@ class Login extends React.Component<Props, *> {
       <div>
         <Header as="h1">Bank of Rapperswil</Header>
         <Form onSubmit={this.handleSubmit}>
-      <Segment stacked id="compact-form">
-        <Header as="h2">Login</Header>
+          <Segment stacked id="compact-form">
+            <Header as="h2">Login</Header>
 
-        <Form.Field>
-          <Input onChange={this.handleLoginChanged}
-            icon='user' iconPosition='left'
-            placeholder = 'Login'
-            value={this.state.login} />
+            <Form.Field>
+              <Input onChange={this.handleLoginChanged}
+                icon='user' iconPosition='left'
+                placeholder = 'Login'
+                value={this.state.login} />
 
-        </Form.Field>
-        <p>{this.getErrorForLogin()}</p>
+            </Form.Field>
+            <p>{this.getErrorForLogin()}</p>
 
-        <Form.Field>
-          <Input onChange={this.handlePasswordChanged}
-            icon='lock' iconPosition='left'
-            placeholder='Password' type='password'
-            value={this.state.password} />
-        </Form.Field>
-        <p> {this.getErrorForPassword()} </p>
+            <Form.Field>
+              <Input onChange={this.handlePasswordChanged}
+                icon='lock' iconPosition='left'
+                placeholder='Password' type='password'
+                value={this.state.password} />
+            </Form.Field>
+            <p> {this.getErrorForPassword()} </p>
 
-        {error && <Message negative>Es ist ein Fehler aufgetreten!</Message>}
-        <Button fluid size='Large' content='Log-in' color='teal' />
+            {error && <Message negative>Es ist ein Fehler aufgetreten!</Message>}
+            <Button fluid size='Large' content='Log-in' color='teal' />
 
-        <Link to="/signup">Noch keinen Account?</Link>
-      </Segment>
-    </Form>
-    </div>
+            <Link to="/signup">Noch keinen Account?</Link>
+          </Segment>
+        </Form>
+      </div>
     );
   }
 }
