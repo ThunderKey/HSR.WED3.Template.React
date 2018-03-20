@@ -2,7 +2,7 @@
 
 import React from "react";
 import { Redirect, Link } from "react-router-dom";
-import { Header, Input, Button, Form, Segment } from 'semantic-ui-react'
+import { Header, Input, Button, Form, Segment, Message } from 'semantic-ui-react'
 
 export type Props = {
   /* Callback to submit an authentication request to the server */
@@ -28,25 +28,20 @@ class Login extends React.Component<Props, *> {
     redirectToReferrer: false
   };
 
+  errorForCredentials = (property, translated) => {
+    const value = this.state[property];
+    if(value.length <= 3) {
+      return `Bitte wählen Sie ein gültiges ${translated} welches mindestens 3 Zeichen lang ist!`;
+    }
+    return null;
+  };
 
   getErrorForPassword  = () => {
-    const password = this.state.password;
-    if(password.length === 0){
-      return "Passwort is empty!";
-    }
-    if(password.length <= 3){
-      return "Password too short!";
-    }
+    return this.errorForCredentials('password', 'Passwort');
   };
 
   getErrorForLogin = () =>{
-    const login = this.state.login;
-    if(login.length === 0){
-      return "Username is empty!";
-    }
-    if(login.length <=3){
-      return "Username too short!";
-    }
+    return this.errorForCredentials('login', 'Login');
   };
 
   handleLoginChanged = (event: Event) => {
@@ -87,33 +82,33 @@ class Login extends React.Component<Props, *> {
       <div>
         <Header as="h1">Bank of Rapperswil</Header>
         <Form onSubmit={this.handleSubmit}>
-			<Segment stacked>
-				<Header as="h2">Login</Header>
-			
-				<Form.Field>
-					<Input onChange={this.handleLoginChanged}
-						icon='user' iconPosition='left'
-						placeholder = 'Login'
-						value={this.state.login} />
-		
-				</Form.Field>
-				<p>{this.getErrorForLogin()}</p>
-				
-				<Form.Field>
-					<Input onChange={this.handlePasswordChanged}
-						icon='lock' iconPosition='left'
-						placeholder='Password' type='password' 
-						value={this.state.password} />
-				</Form.Field>
-				<p> {this.getErrorForPassword()} </p>
-						
-				<Button fluid size='Large' content='Log-in' color='teal' />
+      <Segment stacked id="compact-form">
+        <Header as="h2">Login</Header>
 
-        		{error && <p>Es ist ein Fehler aufgetreten!</p>}
-        		<Link to="/signup">Noch keinen Account?</Link>
-			</Segment>
-		</Form>
-		</div>
+        <Form.Field>
+          <Input onChange={this.handleLoginChanged}
+            icon='user' iconPosition='left'
+            placeholder = 'Login'
+            value={this.state.login} />
+
+        </Form.Field>
+        <p>{this.getErrorForLogin()}</p>
+
+        <Form.Field>
+          <Input onChange={this.handlePasswordChanged}
+            icon='lock' iconPosition='left'
+            placeholder='Password' type='password'
+            value={this.state.password} />
+        </Form.Field>
+        <p> {this.getErrorForPassword()} </p>
+
+        {error && <Message negative>Es ist ein Fehler aufgetreten!</Message>}
+        <Button fluid size='Large' content='Log-in' color='teal' />
+
+        <Link to="/signup">Noch keinen Account?</Link>
+      </Segment>
+    </Form>
+    </div>
     );
   }
 }

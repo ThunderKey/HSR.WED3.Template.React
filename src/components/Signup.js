@@ -2,7 +2,7 @@
 
 import React from "react";
 import { Redirect } from "react-router-dom";
-import { Header, Input, Button, Form, Segment } from 'semantic-ui-react'
+import { Header, Input, Button, Form, Segment, Message } from 'semantic-ui-react'
 import { signup } from "../api";
 
 export type Props = {
@@ -27,20 +27,10 @@ class Signup extends React.Component<{}, *> {
     firstname: "",
     lastname: "",
     password: "",
-	passwordAuthentification:"",
+  passwordAuthentification:"",
     error: null,
     redirectToReferrer: false
   };
-
-//  inputValidation =  (String: input) => {
-//    const input = this.input;
-//    if(input.length === 0){
-//      return "Input is empty!";
-//    }
-//    if(input.length <= 3){
-//      return "Input is too short!";
-//    }
-//  }
 
   handleLoginChanged = (event: Event) => {
     if (event.target instanceof HTMLInputElement) {
@@ -48,29 +38,9 @@ class Signup extends React.Component<{}, *> {
     }
   };
 
-  errorForLogin = () => {
-    const login = this.state.login;
-    if(login.length === 0){
-      return "Login is empty!";
-    }
-    if(login.length <= 3){
-      return "Login is too short!";
-    }
-  }
-
   handleFirstNameChanged = (event: Event) => {
     if (event.target instanceof HTMLInputElement) {
       this.setState({ firstname: event.target.value });
-    }
-  };
-
-  errorForFirstName = () => {
-    const firstName = this.state.firstname;
-    if(firstName.length === 0){
-      return "Firstname is empty!";
-    }
-    if (firstName.length <=3){
-      return"Firstname is too short!";
     }
   };
 
@@ -80,29 +50,9 @@ class Signup extends React.Component<{}, *> {
     }
   };
 
-  errorForLastName = () => {
-    const lastName = this.state.lastname;
-    if(lastName.length === 0){
-      return "Lastname is too empty!";
-    }
-    if(lastName.length <= 3){
-      return "Lastname is too short!";
-    }
-  }
-
   handlePasswordChanged = (event: Event) => {
     if (event.target instanceof HTMLInputElement) {
       this.setState({ password: event.target.value });
-    }
-  };
-
-  errorForPassword = () => {
-    const password = this.state.password;
-    if(password.length === 0){
-      return "Password is empty!"
-    }
-    if(password.length <= 3){
-      return "Password is too short!"
     }
   };
 
@@ -111,12 +61,44 @@ class Signup extends React.Component<{}, *> {
       this.setState({ passwordAuthentification: event.target.value });
     }
   };
- 
+
+  errorForCredentials = (property, translated) => {
+    const value = this.state[property];
+    if(value.length <= 3) {
+      return `Bitte wählen Sie ein gültiges ${translated} welches mindestens 3 Zeichen lang ist!`;
+    }
+    return null;
+  };
+
+  errorForInfo = (property, translated) => {
+    const value = this.state[property];
+    if(value.length <= 3) {
+      return `Bitte wählen Sie ein gültiger ${translated} welches mindestens 3 Zeichen lang ist!`;
+    }
+    return null;
+  };
+
+  errorForLogin = () => {
+    return this.errorForCredentials('login', 'Login');
+  };
+
+  errorForFirstName = () => {
+    return this.errorForInfo('firstname', 'Vorname');
+  };
+
+  errorForLastName = () => {
+    return this.errorForInfo('lastname', 'Nachname');
+  };
+
+  errorForPassword = () => {
+    return this.errorForCredentials('password', 'Passwort');
+  };
+
   errorForPasswordAuthentification = () => {
-	  const passwordAuthentification = this.state.passwordAuthentification;
-	  if(passwordAuthentification !== this.state.password){
-		  return "Passwordauthentification is failed!"
-	  }
+    const passwordAuthentification = this.state.passwordAuthentification;
+    if(passwordAuthentification !== this.state.password){
+      return "Passwörter stimmen nicht überein!"
+    }
   }
 
   handleSubmit = (event: Event) => {
@@ -149,47 +131,47 @@ class Signup extends React.Component<{}, *> {
       <div>
         <Header as="h1">Bank of Rapperswil</Header>
         <Form onSubmit={this.handleSubmit}>
-			<Segment stacked>
-          		<Header as="h2">Registrieren</Header>
-				<Form.Field>
-					<Input onChange={this.handleLoginChanged}
-						icon='user'	iconPosition='left'
-						placeholder="Login"
-						value={this.state.login} />
-				</Form.Field>
-				<p>{this.errorForLogin()}</p>
-				<Form.Field>
-					<Input onChange={this.handleFirstNameChanged}
-					icon='user'	iconPosition='left'
-					placeholder="Vorname"
-					value={this.state.firstname} />
-				</Form.Field>
-				<p>{this.errorForFirstName()}</p>
-				<Form.Field>
-					<Input onChange={this.handleLastNameChanged}
-					icon='user'	iconPosition='left'
-					placeholder="Nachname"
-					value={this.state.lastname} />
-				</Form.Field>
-				<p>{this.errorForLastName()} </p>
-				<Form.Field>
-					<Input onChange={this.handlePasswordChanged}
-					icon='lock'	iconPosition='left'
-					placeholder="Passwort" 
-					type="password"
-					value={this.state.password} />
-				</Form.Field>
-				<p>{this.errorForPassword()}</p>
-				<Form.Field>
-					<Input onChange={this.handlePasswordAuthentificationChanged}
-					icon='lock'	iconPosition='left'
-					placeholder="Passwort"  type="password"
-					value={this.state.passwordAuthentification} />
-				</Form.Field>
-				<p>{this.errorForPasswordAuthentification()}</p>
-				<Button fluid size='Large' content='Account eröffnen' color='teal' />
-				{error && <p>Es ist ein Fehler aufgetreten!</p>}
-			</Segment>
+      <Segment stacked id="compact-form">
+        <Header as="h2">Registrieren</Header>
+        <Form.Field>
+          <Input onChange={this.handleLoginChanged}
+            icon='user'  iconPosition='left'
+            placeholder="Login"
+            value={this.state.login} />
+        </Form.Field>
+        <p>{this.errorForLogin()}</p>
+        <Form.Field>
+          <Input onChange={this.handleFirstNameChanged}
+          icon='user'  iconPosition='left'
+          placeholder="Vorname"
+          value={this.state.firstname} />
+        </Form.Field>
+        <p>{this.errorForFirstName()}</p>
+        <Form.Field>
+          <Input onChange={this.handleLastNameChanged}
+          icon='user'  iconPosition='left'
+          placeholder="Nachname"
+          value={this.state.lastname} />
+        </Form.Field>
+        <p>{this.errorForLastName()} </p>
+        <Form.Field>
+          <Input onChange={this.handlePasswordChanged}
+          icon='lock'  iconPosition='left'
+          placeholder="Passwort"
+          type="password"
+          value={this.state.password} />
+        </Form.Field>
+        <p>{this.errorForPassword()}</p>
+        <Form.Field>
+          <Input onChange={this.handlePasswordAuthentificationChanged}
+          icon='lock'  iconPosition='left'
+          placeholder="Passwort"  type="password"
+          value={this.state.passwordAuthentification} />
+        </Form.Field>
+        <p>{this.errorForPasswordAuthentification()}</p>
+        {error && <Message negative>Es ist ein Fehler aufgetreten!</Message>}
+        <Button fluid size='Large' content='Account eröffnen' color='teal' />
+      </Segment>
         </Form>
      </div>
     );
