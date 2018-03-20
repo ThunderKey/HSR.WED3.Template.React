@@ -1,5 +1,6 @@
 import React from "react";
 import { Table } from 'semantic-ui-react';
+import moment from '../moment_and_overrides';
 
 export type Props = {
   transactions: Array,
@@ -25,7 +26,7 @@ class TransactionTable extends React.Component<Props, *> {
               <Table.Cell>{o.target}</Table.Cell>
               <Table.Cell>{o.amount}</Table.Cell>
               <Table.Cell>{o.total}</Table.Cell>
-              <Table.Cell>{o.date}</Table.Cell>
+              <Table.Cell>{moment(o.date).format('L')}</Table.Cell>
             </Table.Row>
           )}
         </Table.Body>
