@@ -55,7 +55,7 @@ class AllTransactions extends React.Component<Props, *> {
     let start = new Date(this.state.year, this.state.month, 1);
     let end = moment(start).endOf('month');
     api
-      .getTransactions(localStorage.token, start.toISOString(), end.toISOString())
+      .getTransactions(localStorage.token, start.toISOString(), end.toISOString(),-1)
       .then(({result, query}) => { this.setState({transactions: result}); })
       .catch((e) => console.error(e));
   };
