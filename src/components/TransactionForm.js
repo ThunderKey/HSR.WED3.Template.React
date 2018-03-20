@@ -1,5 +1,5 @@
 import React from "react";
-import { Form, Input, Button } from 'semantic-ui-react';
+import { Form, Input, Button, Message } from 'semantic-ui-react';
 import * as api from "../api";
 
 export type Props = {};
@@ -9,6 +9,7 @@ class TransactionForm extends React.Component<Props, *> {
     from: '',
     to: '',
     amount: '',
+    success: null,
   };
 
   handleToChanged = (event: Event) => {
@@ -26,8 +27,8 @@ class TransactionForm extends React.Component<Props, *> {
   createTransaction = () => {
     api
       .transfer(this.state.to, this.state.amount, localStorage.token)
-      .then((result) => { console.log('success'); })
-      .catch((e) => console.error(e));
+      .then((result) => this.setState({success: true, to: '', amount: ''}))
+      .catch((e) => this.setState({success: false}));
   };
 
   render() {
@@ -51,7 +52,9 @@ class TransactionForm extends React.Component<Props, *> {
             placeholder = 'Betrag'
             value={this.state.amount} />
         </Form.Field>
-        <Button fluid size='large' content='Speichern' color='teal' />
+        {this.state.success == false && <Message negative>Es konnte nicht bezahlt werden! Bitte prüfen Sie Ihre Angaben.</Message>}
+        {this.state.success == true && <Message positive>Erfolgreich bezahlt.</Message>}
+        <Button fluid size='large' content='Bezahlen' color='teal' />
       </Form>
     );
   };
