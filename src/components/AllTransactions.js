@@ -1,5 +1,5 @@
 import React from "react";
-import { Header, Form, Dropdown } from 'semantic-ui-react';
+import { Header, Menu, Dropdown } from 'semantic-ui-react';
 import * as api from "../api";
 import TransactionTable from "./TransactionTable";
 import moment from '../moment_and_overrides';
@@ -38,18 +38,14 @@ class AllTransactions extends React.Component<Props, *> {
     return (
       <div>
         <Header as="h1">AllTransactions</Header>
-        <Form>
-          <Form.Field>
-            <label>Jahr auswählen</label>
-            <Dropdown value={this.state.year} onChange={this.handleYearChanged}
-              options={years} />
-          </Form.Field>
-          <Form.Field>
-            <label>Monat auswählen</label>
-            <Dropdown value={this.state.month} onChange={this.handleMonthChanged}
-              options={months} />
-          </Form.Field>
-        </Form>
+        <Menu>
+          <Menu.Item>Jahr auswählen</Menu.Item>
+          <Dropdown label="Jahr auswählen" selection value={this.state.year} onChange={this.handleYearChanged}
+            options={years} />
+          <Menu.Item>Monat auswählen</Menu.Item>
+          <Dropdown selection value={this.state.month} onChange={this.handleMonthChanged}
+            options={months} />
+        </Menu>
         <TransactionTable transactions={this.state.transactions} />
       </div>
     );
