@@ -24,6 +24,18 @@ class TransactionForm extends React.Component<Props, *> {
     }
   };
 
+  errorForCredentials = (property, translated) => {
+    const value = this.state[property];
+    if(value <= 0.05) {
+      return `Bitte wählen Sie ein gültiges ${translated} welches grösser als 0.05 ist!`;
+    }
+    return null;
+  };
+
+  getErrorForAmount  = () => {
+    return this.errorForCredentials('amount', 'Betrag');
+  };
+
   createTransaction = () => {
     api
       .transfer(this.state.to, this.state.amount, localStorage.token)
@@ -52,6 +64,7 @@ class TransactionForm extends React.Component<Props, *> {
             placeholder = 'Betrag'
             value={this.state.amount} />
         </Form.Field>
+		<p> {this.getErrorForAmount()}</p>
         {this.state.success == false && <Message negative>Es konnte nicht bezahlt werden! Bitte prüfen Sie Ihre Angaben.</Message>}
         {this.state.success == true && <Message positive>Erfolgreich bezahlt.</Message>}
         <Button fluid size='large' content='Bezahlen' color='teal' />
