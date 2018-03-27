@@ -10,11 +10,16 @@ class TransactionForm extends React.Component<Props, *> {
     to: '',
     amount: '',
     success: null,
+	toMessage:''
   };
 
   handleToChanged = (event: Event) => {
     if (event.target instanceof HTMLInputElement) {
       this.setState({ to: event.target.value });
+		api
+			.getAccount(event.target.value , localStorage.token)
+			.then(({accountNr, owner}) => this.setState({ toMessage: `${owner.firstname} ${owner.lastname}`}))
+			.catch((e)=>this.setState({toMessage: 'Benutzer nicht gefunden!'}));
     }
   };
 
@@ -57,14 +62,16 @@ class TransactionForm extends React.Component<Props, *> {
           <Input onChange={this.handleToChanged}
             placeholder = 'An'
             value={this.state.to} />
+			<p> {this.state.toMessage} </p>
         </Form.Field>
         <Form.Field>
           <label>Betrag</label>
           <Input onChange={this.handleAmountChanged}
             placeholder = 'Betrag'
             value={this.state.amount} />
+			<p> {this.getErrorForAmount()}</p>
         </Form.Field>
-		<p> {this.getErrorForAmount()}</p>
+		
         {this.state.success == false && <Message negative>Es konnte nicht bezahlt werden! Bitte prüfen Sie Ihre Angaben.</Message>}
         {this.state.success == true && <Message positive>Erfolgreich bezahlt.</Message>}
         <Button fluid size='large' content='Bezahlen' color='teal' />
