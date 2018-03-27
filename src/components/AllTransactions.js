@@ -1,5 +1,5 @@
 import React from "react";
-import { Header, Menu, Dropdown } from 'semantic-ui-react';
+import { Header, Menu, Dropdown, Message } from 'semantic-ui-react';
 import * as api from "../api";
 import TransactionTable from "./TransactionTable";
 import moment from '../moment_and_overrides';
@@ -9,7 +9,7 @@ window.mymo=moment;
 
 let currentYear = new Date().getFullYear();
 let years = [];
-for(let i = 0; i < 5; i++) {
+for(let i = 0; i < 3; i++) {
   let year = currentYear - i;
   years.push({text: year, value: year});
 }
@@ -24,6 +24,7 @@ class AllTransactions extends React.Component<Props, *> {
     transactions: [],
     year: new Date().getFullYear(),
     month: new Date().getMonth(),
+    error: null,
   };
 
   handleYearChanged = (event: Event, {value}) => {
@@ -37,7 +38,8 @@ class AllTransactions extends React.Component<Props, *> {
   render() {
     return (
       <div>
-        <Header as="h1">AllTransactions</Header>
+        <Header as="h1">Alle Zahlungen</Header>
+        {this.state.error ? <Message negative>{this.state.error}</Message> : null}
         <Menu>
           <Menu.Item>Jahr auswählen</Menu.Item>
           <Dropdown label="Jahr auswählen" selection value={this.state.year} onChange={this.handleYearChanged}
@@ -56,8 +58,8 @@ class AllTransactions extends React.Component<Props, *> {
     let end = moment(start).endOf('month');
     api
       .getTransactions(localStorage.token, start.toISOString(), end.toISOString(),-1)
-      .then(({result, query}) => { this.setState({transactions: result}); })
-      .catch((e) => console.error(e));
+      .then(({result, query}) => { this.setState({transactions: result, error: null}); })
+      .catch((e) => e.response.json().then(j => this.setState({error: j.message})));
   };
 
   componentDidMount() {
@@ -65,7 +67,7 @@ class AllTransactions extends React.Component<Props, *> {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if(this.state.transactions === prevState.transactions) {
+    if(this.state.transactions === prevState.transactions && this.state.error === prevState.error) {
       this.updateTransactions();
     }
   }
