@@ -19,11 +19,10 @@ const MenuBar = withRouter(({ history, location: { pathname }, user, signout }) 
       );
     };
     return (
-      <Menu>
+      <Menu stackable>
         <Menu.Item>
           {user.firstname} {user.lastname} &ndash; {user.accountNr}
         </Menu.Item>
-        {/* Links inside the App are created using the react-router's Link component */}
         <MenuLink href="/" label="Home" />
         <MenuLink href="/dashboard" label="Kontoübersicht" />
         <MenuLink href="/transactions" label="Zahlungen" />

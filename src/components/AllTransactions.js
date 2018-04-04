@@ -17,8 +17,6 @@ const months = moment.months().map((month, i) => {
   return {text: month, value: i};
 });
 
-//const monthNames = ['Januar', 'Februar', 'März'
-
 class AllTransactions extends React.Component<Props, *> {
   state = {
     transactions: [],
@@ -40,7 +38,7 @@ class AllTransactions extends React.Component<Props, *> {
       <div>
         <Header as="h1">Alle Zahlungen</Header>
         {this.state.error ? <Message negative>{this.state.error}</Message> : null}
-        <Menu>
+        <Menu stackable>
           <Menu.Item>Jahr auswählen</Menu.Item>
           <Dropdown label="Jahr auswählen" selection value={this.state.year} onChange={this.handleYearChanged}
             options={years} />
