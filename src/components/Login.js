@@ -2,7 +2,7 @@
 
 import React from "react";
 import { Redirect, Link } from "react-router-dom";
-import { Header, Input, Button, Form, Segment, Message } from 'semantic-ui-react';
+import { Header, Input, Button, Form, Segment } from 'semantic-ui-react';
 import OptionalMessage from './OptionalMessage';
 
 export type Props = {
