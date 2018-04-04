@@ -13,9 +13,9 @@ class Dashboard extends React.Component<Props, *> {
 
   updateTransactions = () =>{
     api
-        .getTransactions(localStorage.token)
-        .then(({result, query}) => { this.setState({transactions: result}); })
-        .catch((e) => console.error(e));
+      .getTransactions(localStorage.token)
+      .then(({result, query}) => { this.setState({transactions: result}); })
+      .catch((e) => console.error(e));
   }
 
 

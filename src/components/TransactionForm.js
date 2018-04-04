@@ -55,32 +55,32 @@ class TransactionForm extends React.Component<Props, *> {
 
   render() {
     return (
-        <Form onSubmit={this.createTransaction}>
+      <Form onSubmit={this.createTransaction}>
         <Form.Field>
-        <label>Von</label>
-        <Input disabled
-        placeholder = 'Von'
-        value={this.state.from} />
+          <label>Von</label>
+          <Input disabled
+            placeholder = 'Von'
+            value={this.state.from} />
         </Form.Field>
         <Form.Field>
-        <label>An</label>
-        <Input onChange={this.handleToChanged}
-        placeholder = 'An'
-        value={this.state.to} />
-        <OptionalMessage message={this.state.toMessage} />
+          <label>An</label>
+          <Input onChange={this.handleToChanged}
+            placeholder = 'An'
+            value={this.state.to} />
+          <OptionalMessage message={this.state.toMessage} />
         </Form.Field>
         <Form.Field>
-        <label>Betrag</label>
-        <Input onChange={this.handleAmountChanged}
-        placeholder = 'Betrag'
-        value={this.state.amount} />
-        <OptionalMessage message={this.getErrorForAmount()} />
+          <label>Betrag</label>
+          <Input onChange={this.handleAmountChanged}
+            placeholder = 'Betrag'
+            value={this.state.amount} />
+          <OptionalMessage message={this.getErrorForAmount()} />
         </Form.Field>
         <OptionalMessage negative message={this.state.success === false && 'Es konnte nicht bezahlt werden! Bitte prüfen Sie Ihre Angaben.'} />
         <OptionalMessage positive message={this.state.success === true && 'Erfolgreich bezahlt.'} />
         <Button fluid size='large' content='Bezahlen' color='teal' />
-        </Form>
-        );
+      </Form>
+    );
   };
 
   componentDidMount() {
