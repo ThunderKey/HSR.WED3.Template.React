@@ -1,9 +1,10 @@
 import React from "react";
-import { Form, Input, Button, Message } from 'semantic-ui-react';
+import { Form, Input, Button } from 'semantic-ui-react';
 import * as api from "../api";
+import OptionalMessage from './OptionalMessage';
 
 export type Props = {
-	onSubmit: ()=> void,
+  onSubmit: ()=> void,
 };
 
 class TransactionForm extends React.Component<Props, *> {
@@ -12,16 +13,20 @@ class TransactionForm extends React.Component<Props, *> {
     to: '',
     amount: '',
     success: null,
-	toMessage:''
+    toMessage:''
   };
 
   handleToChanged = (event: Event) => {
     if (event.target instanceof HTMLInputElement) {
-      this.setState({ to: event.target.value });
-		api
-			.getAccount(event.target.value , localStorage.token)
-			.then(({accountNr, owner}) => this.setState({ toMessage: `${owner.firstname} ${owner.lastname}`}))
-			.catch((e)=>this.setState({toMessage: 'Benutzer nicht gefunden!'}));
+      if(event.target.value) {
+        this.setState({ to: event.target.value });
+        api
+          .getAccount(event.target.value , localStorage.token)
+          .then(({accountNr, owner}) => this.setState({ toMessage: `${owner.firstname} ${owner.lastname}`}))
+          .catch((e)=>this.setState({toMessage: 'Benutzer nicht gefunden!'}));
+      } else {
+        this.setState({ to: event.target.value });
+      }
     }
   };
 
@@ -31,57 +36,51 @@ class TransactionForm extends React.Component<Props, *> {
     }
   };
 
-  errorForCredentials = (property, translated) => {
-    const value = this.state[property];
+  getErrorForAmount  = () => {
+    const value = this.state.amount;
     if(value <= 0.05) {
-      return `Bitte wählen Sie ein gültiges ${translated} welches grösser als 0.05 ist!`;
+      return `Bitte wählen Sie einen gültigen Betrag welcher grösser als 0.05 ist!`;
     }
     return null;
-  };
-
-  getErrorForAmount  = () => {
-    return this.errorForCredentials('amount', 'Betrag');
   };
 
   createTransaction = () => {
     api
       .transfer(this.state.to, this.state.amount, localStorage.token)
-      .then((result) =>{ 
-			this.setState({success: true, to: '', amount: ''});
-			this.props.onSubmit();
-	  })
-      .catch((e) => this.setState({success: false}));
+      .then((result) =>{
+        this.setState({success: true, to: '', amount: ''});
+        this.props.onSubmit();
+      }).catch((e) => this.setState({success: false}));
   };
 
   render() {
     return (
-      <Form onSubmit={this.createTransaction}>
+        <Form onSubmit={this.createTransaction}>
         <Form.Field>
-          <label>Von</label>
-          <Input disabled
-            placeholder = 'Von'
-            value={this.state.from} />
+        <label>Von</label>
+        <Input disabled
+        placeholder = 'Von'
+        value={this.state.from} />
         </Form.Field>
         <Form.Field>
-          <label>An</label>
-          <Input onChange={this.handleToChanged}
-            placeholder = 'An'
-            value={this.state.to} />
-			<p> {this.state.toMessage} </p>
+        <label>An</label>
+        <Input onChange={this.handleToChanged}
+        placeholder = 'An'
+        value={this.state.to} />
+        <OptionalMessage message={this.state.toMessage} />
         </Form.Field>
         <Form.Field>
-          <label>Betrag</label>
-          <Input onChange={this.handleAmountChanged}
-            placeholder = 'Betrag'
-            value={this.state.amount} />
-			<p> {this.getErrorForAmount()}</p>
+        <label>Betrag</label>
+        <Input onChange={this.handleAmountChanged}
+        placeholder = 'Betrag'
+        value={this.state.amount} />
+        <OptionalMessage message={this.getErrorForAmount()} />
         </Form.Field>
-		
-        {this.state.success === false && <Message negative>Es konnte nicht bezahlt werden! Bitte prüfen Sie Ihre Angaben.</Message>}
-        {this.state.success === true && <Message positive>Erfolgreich bezahlt.</Message>}
+        <OptionalMessage negative message={this.state.success === false && 'Es konnte nicht bezahlt werden! Bitte prüfen Sie Ihre Angaben.'} />
+        <OptionalMessage positive message={this.state.success === true && 'Erfolgreich bezahlt.'} />
         <Button fluid size='large' content='Bezahlen' color='teal' />
-      </Form>
-    );
+        </Form>
+        );
   };
 
   componentDidMount() {

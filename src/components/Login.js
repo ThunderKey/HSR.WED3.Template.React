@@ -2,7 +2,8 @@
 
 import React from "react";
 import { Redirect, Link } from "react-router-dom";
-import { Header, Input, Button, Form, Segment, Message } from 'semantic-ui-react'
+import { Header, Input, Button, Form, Segment, Message } from 'semantic-ui-react';
+import OptionalMessage from './OptionalMessage';
 
 export type Props = {
   /* Callback to submit an authentication request to the server */
@@ -90,20 +91,19 @@ class Login extends React.Component<Props, *> {
                 icon='user' iconPosition='left'
                 placeholder = 'Login'
                 value={this.state.login} />
-
+              <OptionalMessage message={this.getErrorForLogin()} />
             </Form.Field>
-            <p>{this.getErrorForLogin()}</p>
 
             <Form.Field>
               <Input onChange={this.handlePasswordChanged}
                 icon='lock' iconPosition='left'
                 placeholder='Password' type='password'
                 value={this.state.password} />
+              <OptionalMessage message={this.getErrorForPassword()} />
             </Form.Field>
-            <p> {this.getErrorForPassword()} </p>
 
-            {error && <Message negative>Es ist ein Fehler aufgetreten!</Message>}
-            <Button fluid size='Large' content='Log-in' color='teal' />
+            <OptionalMessage negative message={error && 'Es ist ein Fehler aufgetreten!'} />
+            <Button fluid size='large' content='Log-in' color='teal' />
 
             <Link to="/signup">Noch keinen Account?</Link>
           </Segment>
