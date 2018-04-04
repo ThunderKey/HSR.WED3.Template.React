@@ -23,8 +23,10 @@ class Dashboard extends React.Component<Props, *> {
     return (
       <div>
         <Header as="h1">Dashboard</Header>
-        <TransactionTable transactions={this.state.transactions} />
-		<TransactionForm onSubmit={this.updateTransactions} />
+		<div class="ui stackable two column grid">
+			<div class="column"> <TransactionForm onSubmit={this.updateTransactions} /> </div>
+        	<div class="column"> <TransactionTable transactions={this.state.transactions} /> </div>
+		</div>
       </div>
     );
   };
