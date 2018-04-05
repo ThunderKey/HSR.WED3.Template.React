@@ -1,14 +1,16 @@
 // @flow
 
 import React from "react";
-import { Header, Menu, Dropdown, Message } from 'semantic-ui-react';
+import { Header, Menu, Dropdown } from 'semantic-ui-react';
 import * as api from "../api";
 import TransactionTable from "./TransactionTable";
-import moment from '../moment_and_overrides';
+import OptionalMessage from "./OptionalMessage";
 import UserCache from '../UserCache';
+import moment from '../moment_and_overrides';
+
+import type { Transaction } from './TransactionTable';
 
 export type Props = {};
-window.mymo=moment;
 
 let currentYear = new Date().getFullYear();
 let years = [];
@@ -20,27 +22,34 @@ const months = moment.months().map((month, i) => {
   return {text: month, value: i};
 });
 
+type State = {
+  transactions: Array<Transaction>,
+  year: number,
+  month: number,
+  error: ?string,
+};
+
 class AllTransactions extends React.Component<Props, *> {
-  state = {
+  state : State = {
     transactions: [],
     year: new Date().getFullYear(),
     month: new Date().getMonth(),
     error: null,
   };
 
-  handleYearChanged = (event: Event, {value}) => {
-    this.setState({ year: value });
+  handleYearChanged = (event: Event, {value}: {value: string}) => {
+    this.setState({ year: parseInt(value, 10) });
   };
 
-  handleMonthChanged = (event: Event, {value}) => {
-    this.setState({ month: value });
+  handleMonthChanged = (event: Event, {value}: {value: string}) => {
+    this.setState({ month: parseInt(value, 10) });
   };
 
   render() {
     return (
       <div>
         <Header as="h1">Alle Zahlungen</Header>
-        {this.state.error ? <Message negative>{this.state.error}</Message> : null}
+        <OptionalMessage negative message={this.state.error} />
         <Menu stackable>
           <Menu.Item>Jahr auswählen</Menu.Item>
           <Dropdown label="Jahr auswählen" selection value={this.state.year} onChange={this.handleYearChanged}
@@ -67,7 +76,7 @@ class AllTransactions extends React.Component<Props, *> {
     this.updateTransactions();
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps : Props, prevState : State) {
     if(this.state.transactions === prevState.transactions && this.state.error === prevState.error) {
       this.updateTransactions();
     }

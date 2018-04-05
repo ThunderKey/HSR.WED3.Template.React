@@ -104,6 +104,7 @@ class App extends React.Component<{}, State> {
               path="/dashboard"
               isAuthenticated={isAuthenticated}
               token={token}
+              user={user}
               component={Dashboard}
             />
             <PrivateRoute

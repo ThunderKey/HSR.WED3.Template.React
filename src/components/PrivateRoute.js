@@ -1,8 +1,18 @@
+// @flow
+
 import React from "react";
 import { Route, Redirect } from "react-router-dom";
+import type { User } from '../api';
 
-function PrivateRoute({ component, isAuthenticated, user, token, ...rest }) {
-  if (isAuthenticated) {
+type Props = {
+  component: any,
+  isAuthenticated: boolean,
+  user: ?User,
+  token: ?string,
+};
+
+function PrivateRoute({ component, isAuthenticated, user, token, ...rest } : Props) {
+  if (isAuthenticated && user && token) {
     // if the user is authenticated, just render the component
     return (
       <Route

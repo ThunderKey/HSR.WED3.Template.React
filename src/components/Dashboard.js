@@ -7,10 +7,16 @@ import TransactionForm from "./TransactionForm";
 import TransactionTable from "./TransactionTable";
 import UserCache from '../UserCache';
 
+import type { Transaction } from "./TransactionTable";
+
 export type Props = {};
 
+type State = {
+  transactions: Array<Transaction>,
+};
+
 class Dashboard extends React.Component<Props, *> {
-  state = {
+  state : State = {
     transactions: [],
   };
 

@@ -1,10 +1,12 @@
+// @flow
+
 import React from "react";
 import { Message } from 'semantic-ui-react';
 
 export type Props = {
-  message: String,
-  negative: Boolean,
-  positive: Boolean,
+  message: ?string|boolean,
+  negative?: boolean,
+  positive?: boolean,
 };
 
 class OptionalMessage extends React.Component<Props, *> {

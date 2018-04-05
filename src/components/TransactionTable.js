@@ -1,9 +1,19 @@
+// @flow
+
 import React from "react";
 import { Table } from 'semantic-ui-react';
 import moment from '../moment_and_overrides';
 
+export type Transaction = {
+  from:   String,
+  target: String,
+  amount: number,
+  total:  number,
+  date:   String,
+};
+
 export type Props = {
-  transactions: Array,
+  transactions: Array<Transaction>,
 };
 
 class TransactionTable extends React.Component<Props, *> {

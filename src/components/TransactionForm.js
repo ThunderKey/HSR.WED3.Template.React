@@ -11,24 +11,31 @@ export type Props = {
 };
 
 class TransactionForm extends React.Component<Props, *> {
-  state = {
+  state : {
+    from: string,
+    to: string,
+    amount: number,
+    success: ?boolean,
+    toMessage: string,
+  } = {
     from: '',
     to: '',
-    amount: '',
+    amount: 0,
     success: null,
     toMessage:''
   };
 
   handleToChanged = (event: Event) => {
     if (event.target instanceof HTMLInputElement) {
-      if(event.target.value) {
-        this.setState({ to: event.target.value });
+      const el : HTMLInputElement = event.target;
+      if(el.value) {
+        this.setState({ to: el.value });
         api
-          .getAccount(event.target.value , UserCache.getToken())
+          .getAccount(el.value , UserCache.getToken())
           .then(({accountNr, owner}) => this.setState({ toMessage: `${owner.firstname} ${owner.lastname}`}))
           .catch((e)=>this.setState({toMessage: 'Benutzer nicht gefunden!'}));
       } else {
-        this.setState({ to: event.target.value });
+        this.setState({ to: el.value, toMessage: '' });
       }
     }
   };
@@ -41,7 +48,7 @@ class TransactionForm extends React.Component<Props, *> {
 
   getErrorForAmount  = () => {
     const value = this.state.amount;
-    if(value <= 0.05) {
+    if(isNaN(value) || value <= 0.05) {
       return `Bitte wählen Sie einen gültigen Betrag welcher grösser als 0.05 ist!`;
     }
     return null;
@@ -51,7 +58,7 @@ class TransactionForm extends React.Component<Props, *> {
     api
       .transfer(this.state.to, this.state.amount, UserCache.getToken())
       .then((result) =>{
-        this.setState({success: true, to: '', amount: ''});
+        this.setState({success: true, to: '', amount: 0});
         this.props.onSubmit();
       }).catch((e) => this.setState({success: false}));
   };

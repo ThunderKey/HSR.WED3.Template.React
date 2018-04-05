@@ -22,7 +22,7 @@ export type Props = {
   }
 };
 
-class Signup extends React.Component<{}, *> {
+class Signup extends React.Component<Props, *> {
   state = {
     login: '',
     firstname: '',
@@ -63,7 +63,7 @@ class Signup extends React.Component<{}, *> {
     }
   };
 
-  getErrorForCredentials = (property, translated) => {
+  getErrorForCredentials = (property : string, translated : string) => {
     const value = this.state[property];
     if(value.length <= 3) {
       return `Bitte wählen Sie ein gültiges ${translated} welches länger als 3 Zeichen lang ist!`;
@@ -71,7 +71,7 @@ class Signup extends React.Component<{}, *> {
     return null;
   };
 
-  getErrorForInfo = (property, translated) => {
+  getErrorForInfo = (property : string, translated : string) => {
     const value = this.state[property];
     if(value.length <= 3) {
       return `Bitte wählen Sie ein gültiger ${translated} welches länger als 3 Zeichen lang ist!`;
