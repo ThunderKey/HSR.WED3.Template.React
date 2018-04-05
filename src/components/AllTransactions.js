@@ -1,8 +1,11 @@
+// @flow
+
 import React from "react";
 import { Header, Menu, Dropdown, Message } from 'semantic-ui-react';
 import * as api from "../api";
 import TransactionTable from "./TransactionTable";
 import moment from '../moment_and_overrides';
+import UserCache from '../UserCache';
 
 export type Props = {};
 window.mymo=moment;
@@ -55,7 +58,7 @@ class AllTransactions extends React.Component<Props, *> {
     let start = new Date(this.state.year, this.state.month, 1);
     let end = moment(start).endOf('month');
     api
-      .getTransactions(localStorage.token, start.toISOString(), end.toISOString(),-1)
+      .getTransactions(UserCache.getToken(), start.toISOString(), end.toISOString(),-1)
       .then(({result, query}) => { this.setState({transactions: result, error: null}); })
       .catch((e) => e.response.json().then(j => this.setState({error: j.message})));
   };

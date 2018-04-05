@@ -16,6 +16,7 @@ import AllTransactions from "./components/AllTransactions";
 import PrivateRoute from "./components/PrivateRoute";
 
 import * as api from "./api";
+import UserCache from "./UserCache";
 
 import type { User } from "./api";
 
@@ -28,13 +29,13 @@ type State = {
 class App extends React.Component<{}, State> {
   constructor(props: any) {
     super(props);
-    const token = localStorage.getItem("token");
-    const user = localStorage.getItem("user");
+    const token = UserCache.getToken();
+    const user = UserCache.getUser();
     if (token && user) {
       this.state = {
         isAuthenticated: true,
         token,
-        user: JSON.parse(user)
+        user: user
       };
     } else {
       this.state = {
@@ -54,8 +55,7 @@ class App extends React.Component<{}, State> {
       .login(login, password)
       .then(({ token, owner }) => {
         this.setState({ isAuthenticated: true, token, user: owner });
-        localStorage.setItem("token", token);
-        localStorage.setItem("user", JSON.stringify(owner));
+        UserCache.set(owner, token);
         cb(null);
       })
       .catch(error => cb(error));
@@ -67,8 +67,7 @@ class App extends React.Component<{}, State> {
       token: undefined,
       user: undefined
     });
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
+    UserCache.clear();
     callback();
   };
 

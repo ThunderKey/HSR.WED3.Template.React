@@ -1,7 +1,10 @@
+// @flow
+
 import React from "react";
 import { Form, Input, Button } from 'semantic-ui-react';
 import * as api from "../api";
 import OptionalMessage from './OptionalMessage';
+import UserCache from '../UserCache';
 
 export type Props = {
   onSubmit: ()=> void,
@@ -21,7 +24,7 @@ class TransactionForm extends React.Component<Props, *> {
       if(event.target.value) {
         this.setState({ to: event.target.value });
         api
-          .getAccount(event.target.value , localStorage.token)
+          .getAccount(event.target.value , UserCache.getToken())
           .then(({accountNr, owner}) => this.setState({ toMessage: `${owner.firstname} ${owner.lastname}`}))
           .catch((e)=>this.setState({toMessage: 'Benutzer nicht gefunden!'}));
       } else {
@@ -46,7 +49,7 @@ class TransactionForm extends React.Component<Props, *> {
 
   createTransaction = () => {
     api
-      .transfer(this.state.to, this.state.amount, localStorage.token)
+      .transfer(this.state.to, this.state.amount, UserCache.getToken())
       .then((result) =>{
         this.setState({success: true, to: '', amount: ''});
         this.props.onSubmit();
@@ -84,7 +87,7 @@ class TransactionForm extends React.Component<Props, *> {
   };
 
   componentDidMount() {
-    this.setState({from: JSON.parse(localStorage.user).accountNr});
+    this.setState({from: UserCache.getUser().accountNr});
   }
 }
 

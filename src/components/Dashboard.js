@@ -1,8 +1,11 @@
+// @flow
+
 import React from "react";
 import { Header, Grid } from 'semantic-ui-react';
 import * as api from "../api";
 import TransactionForm from "./TransactionForm";
 import TransactionTable from "./TransactionTable";
+import UserCache from '../UserCache';
 
 export type Props = {};
 
@@ -13,7 +16,7 @@ class Dashboard extends React.Component<Props, *> {
 
   updateTransactions = () =>{
     api
-      .getTransactions(localStorage.token)
+      .getTransactions(UserCache.getToken())
       .then(({result, query}) => { this.setState({transactions: result}); })
       .catch((e) => console.error(e));
   }
