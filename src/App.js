@@ -16,6 +16,7 @@ import AllTransactions from "./components/AllTransactions";
 import PrivateRoute from "./components/PrivateRoute";
 
 import * as api from "./api";
+import UserCache from "./UserCache";
 
 import type { User } from "./api";
 
@@ -28,13 +29,13 @@ type State = {
 class App extends React.Component<{}, State> {
   constructor(props: any) {
     super(props);
-    const token = localStorage.getItem("token");
-    const user = localStorage.getItem("user");
+    const token = UserCache.getToken();
+    const user = UserCache.getUser();
     if (token && user) {
       this.state = {
         isAuthenticated: true,
         token,
-        user: JSON.parse(user)
+        user: user
       };
     } else {
       this.state = {
@@ -54,8 +55,7 @@ class App extends React.Component<{}, State> {
       .login(login, password)
       .then(({ token, owner }) => {
         this.setState({ isAuthenticated: true, token, user: owner });
-        localStorage.setItem("token", token);
-        localStorage.setItem("user", JSON.stringify(owner));
+        UserCache.set(owner, token);
         cb(null);
       })
       .catch(error => cb(error));
@@ -67,8 +67,7 @@ class App extends React.Component<{}, State> {
       token: undefined,
       user: undefined
     });
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
+    UserCache.clear();
     callback();
   };
 
@@ -80,39 +79,42 @@ class App extends React.Component<{}, State> {
       <Router>
         <div>
           <MenuBar user={isAuthenticated && user} signout={this.signout} />
-          <Route
-            exact
-            path="/"
-            render={props => (
-              <Home {...props} isAuthenticated={isAuthenticated} />
-            )}
-          />
-          <Route
-            path="/login"
-            render={props => (
-              <Login {...props} authenticate={this.authenticate} />
-            )}
-          />
-          <Route path="/signup" render={props => (
-              <Signup {...props} authenticate={this.authenticate} />
-            )}/>
-          {/*
-            The following are protected routes that are only available for logged-in users. We also pass the user and token so
-            these components can do API calls. PrivateRoute is not part of react-router but our own implementation.
-          */}
-          <PrivateRoute
-            path="/dashboard"
-            isAuthenticated={isAuthenticated}
-            token={token}
-            component={Dashboard}
-          />
-          <PrivateRoute
-            path="/transactions"
-            isAuthenticated={isAuthenticated}
-            token={token}
-            user={user}
-            component={AllTransactions}
-          />
+          <main>
+            <Route
+              exact
+              path="/"
+              render={props => (
+                <Home {...props} isAuthenticated={isAuthenticated} />
+              )}
+            />
+            <Route
+              path="/login"
+              render={props => (
+                <Login {...props} authenticate={this.authenticate} />
+              )}
+            />
+            <Route path="/signup" render={props => (
+                <Signup {...props} authenticate={this.authenticate} />
+              )}/>
+            {/*
+              The following are protected routes that are only available for logged-in users. We also pass the user and token so
+              these components can do API calls. PrivateRoute is not part of react-router but our own implementation.
+            */}
+            <PrivateRoute
+              path="/dashboard"
+              isAuthenticated={isAuthenticated}
+              token={token}
+              user={user}
+              component={Dashboard}
+            />
+            <PrivateRoute
+              path="/transactions"
+              isAuthenticated={isAuthenticated}
+              token={token}
+              user={user}
+              component={AllTransactions}
+            />
+          </main>
         </div>
       </Router>
     );

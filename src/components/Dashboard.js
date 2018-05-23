@@ -1,32 +1,47 @@
+// @flow
+
 import React from "react";
-import { Header } from 'semantic-ui-react';
+import { Header, Grid } from 'semantic-ui-react';
 import * as api from "../api";
 import TransactionForm from "./TransactionForm";
 import TransactionTable from "./TransactionTable";
+import UserCache from '../UserCache';
+
+import type { Transaction } from "./TransactionTable";
 
 export type Props = {};
 
+type State = {
+  transactions: Array<Transaction>,
+};
+
 class Dashboard extends React.Component<Props, *> {
-  state = {
+  state : State = {
     transactions: [],
   };
 
-	updateTransactions = () =>{
-	  api
-        .getTransactions(localStorage.token)
-        .then(({result, query}) => { this.setState({transactions: result}); })
-        .catch((e) => console.error(e));
-	}
+  updateTransactions = () =>{
+    api
+      .getTransactions(UserCache.getToken())
+      .then(({result, query}) => { this.setState({transactions: result}); })
+      .catch((e) => console.error(e));
+  }
 
 
   render() {
     return (
       <div>
         <Header as="h1">Dashboard</Header>
-		<div class="ui stackable two column grid">
-			<div class="column"> <TransactionForm onSubmit={this.updateTransactions} /> </div>
-        	<div class="column"> <TransactionTable transactions={this.state.transactions} /> </div>
-		</div>
+        <Grid columns='equal' divided>
+          <Grid.Row>
+            <Grid.Column mobile={16} tablet={5} computer={3}>
+              <TransactionForm onSubmit={this.updateTransactions} />
+            </Grid.Column>
+            <Grid.Column>
+              <TransactionTable transactions={this.state.transactions} />
+            </Grid.Column>
+          </Grid.Row>
+        </Grid>
       </div>
     );
   };

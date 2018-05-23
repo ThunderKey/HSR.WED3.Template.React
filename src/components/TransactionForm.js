@@ -1,27 +1,42 @@
+// @flow
+
 import React from "react";
-import { Header,Form, Input,Segment, Button, Message } from 'semantic-ui-react';
+import { Header,Form, Input, Segment, Button, Message } from 'semantic-ui-react';
 import * as api from "../api";
+import OptionalMessage from './OptionalMessage';
+import UserCache from '../UserCache';
 
 export type Props = {
-	onSubmit: ()=> void,
+  onSubmit: ()=> void,
 };
 
 class TransactionForm extends React.Component<Props, *> {
-  state = {
+  state : {
+    from: string,
+    to: string,
+    amount: number,
+    success: ?boolean,
+    toMessage: string,
+  } = {
     from: '',
     to: '',
-    amount: '',
+    amount: 0,
     success: null,
-	toMessage:''
+    toMessage:''
   };
 
   handleToChanged = (event: Event) => {
     if (event.target instanceof HTMLInputElement) {
-      this.setState({ to: event.target.value });
-		api
-			.getAccount(event.target.value , localStorage.token)
-			.then(({accountNr, owner}) => this.setState({ toMessage: `${owner.firstname} ${owner.lastname}`}))
-			.catch((e)=>this.setState({toMessage: 'Benutzer nicht gefunden!'}));
+      const el : HTMLInputElement = event.target;
+      if(el.value) {
+        this.setState({ to: el.value });
+        api
+          .getAccount(el.value , UserCache.getToken())
+          .then(({accountNr, owner}) => this.setState({ toMessage: `${owner.firstname} ${owner.lastname}`}))
+          .catch((e)=>this.setState({toMessage: 'Benutzer nicht gefunden!'}));
+      } else {
+        this.setState({ to: el.value, toMessage: '' });
+      }
     }
   };
 
@@ -31,66 +46,61 @@ class TransactionForm extends React.Component<Props, *> {
     }
   };
 
-  errorForCredentials = (property, translated) => {
-    const value = this.state[property];
-    if(value <= 0.05) {
-      return `Bitte wählen Sie ein gültiges ${translated} welches grösser als 0.05 ist!`;
+  getErrorForAmount  = () => {
+    const value = this.state.amount;
+    if(isNaN(value) || value <= 0.05) {
+      return `Bitte wählen Sie einen gültigen Betrag welcher grösser als 0.05 ist!`;
     }
     return null;
   };
 
-  getErrorForAmount  = () => {
-    return this.errorForCredentials('amount', 'Betrag');
-  };
-
   createTransaction = () => {
     api
-      .transfer(this.state.to, this.state.amount, localStorage.token)
-      .then((result) =>{ 
-			this.setState({success: true, to: '', amount: ''});
-			this.props.onSubmit();
-	  })
-      .catch((e) => this.setState({success: false}));
+      .transfer(this.state.to, this.state.amount, UserCache.getToken())
+      .then((result) =>{
+        this.setState({success: true, to: '', amount: 0});
+        this.props.onSubmit();
+      }).catch((e) => this.setState({success: false}));
   };
 
   render() {
     return (
       <div>
-      <Form onSubmit={this.createTransaction}>
-        <Segment stacked id="compact-form">
-          <Header as="h1">New Payment</Header>
-          <Form.Field>
-            <label>Von</label>
-            <Input disabled
-              placeholder = 'Von'
-              value={this.state.from} />
-          </Form.Field>
-          <Form.Field>
-            <label>An</label>
-            <Input onChange={this.handleToChanged}
-              placeholder = 'An'
-              value={this.state.to} />
-        <p> {this.state.toMessage} </p>
-          </Form.Field>
-          <Form.Field>
-            <label>Betrag</label>
-            <Input onChange={this.handleAmountChanged}
-              placeholder = 'Betrag'
-              value={this.state.amount} />
-        <p> {this.getErrorForAmount()}</p>
-          </Form.Field>
+        <Form onSubmit={this.createTransaction}>
+          <Segment stacked id="compact-form">
+            <Header as="h1">New Payment</Header>
+            <Form.Field>
+              <label>Von</label>
+              <Input disabled
+                placeholder = 'Von'
+                value={this.state.from} />
+            </Form.Field>
+            <Form.Field>
+              <label>An</label>
+              <Input onChange={this.handleToChanged}
+                placeholder = 'An'
+                value={this.state.to} />
+              <OptionalMessage message={this.state.toMessage} />
+            </Form.Field>
+            <Form.Field>
+              <label>Betrag</label>
+              <Input onChange={this.handleAmountChanged}
+                placeholder = 'Betrag'
+                value={this.state.amount} />
+              <OptionalMessage message={this.getErrorForAmount()} />
+            </Form.Field>
 
-          {this.state.success === false && <Message negative>Es konnte nicht bezahlt werden! Bitte prüfen Sie Ihre Angaben.</Message>}
-          {this.state.success === true && <Message positive>Erfolgreich bezahlt.</Message>}
-          <Button fluid size='large' content='Bezahlen' color='teal' />
-          </Segment>  
-      </Form>
+            <OptionalMessage negative message={this.state.success === false && 'Es konnte nicht bezahlt werden! Bitte prüfen Sie Ihre Angaben.'} />
+            <OptionalMessage positive message={this.state.success === true && 'Erfolgreich bezahlt.'} />
+            <Button fluid size='large' content='Bezahlen' color='teal' />
+          </Segment>
+        </Form>
       </div>
     );
   };
 
   componentDidMount() {
-    this.setState({from: JSON.parse(localStorage.user).accountNr});
+    this.setState({from: UserCache.getUser().accountNr});
   }
 }
 
