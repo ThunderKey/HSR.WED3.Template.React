@@ -23,10 +23,7 @@ export default {
 
   _get(key : string) : string {
     const value : ?string = localStorage.getItem(key);
-    if(value) {
-      return value;
-    }
-    throw new Error(`No ${key} set`);
+    return value;
   },
 
   _set(key : string, value : string) {

@@ -21,8 +21,8 @@ class TransactionTable extends React.Component<Props, *> {
     return (
       <Table>
         <Table.Header>
-          <Table.Row>           
-            <Table.HeaderCell>Date</Table.HeaderCell>
+          <Table.Row>
+            <Table.HeaderCell>Datum</Table.HeaderCell>
             <Table.HeaderCell>Von</Table.HeaderCell>
             <Table.HeaderCell>An</Table.HeaderCell>
             <Table.HeaderCell>Betrag</Table.HeaderCell>
@@ -37,7 +37,6 @@ class TransactionTable extends React.Component<Props, *> {
               <Table.Cell>{o.target}</Table.Cell>
               <Table.Cell>{o.amount}</Table.Cell>
               <Table.Cell>{o.total}</Table.Cell>
-              
             </Table.Row>
           )}
         </Table.Body>
