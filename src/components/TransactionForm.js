@@ -1,7 +1,7 @@
 // @flow
 
 import React from "react";
-import { Header,Form, Input, Segment, Button, Message } from 'semantic-ui-react';
+import { Header,Form, Input, Segment, Button } from 'semantic-ui-react';
 import * as api from "../api";
 import OptionalMessage from './OptionalMessage';
 import UserCache from '../UserCache';
