@@ -31,7 +31,7 @@ class Login extends React.Component<Props, *> {
   errorForCredentials = (property, translated) => {
     const value = this.state[property];
     if(value.length <= 3) {
-      return `Bitte wählen Sie ein gültiges ${translated} welches mindestens 3 Zeichen lang ist!`;
+      return `Bitte wählen Sie ein gültiges ${translated} welches mindestens 4 Zeichen lang ist!`;
     }
     return null;
   };

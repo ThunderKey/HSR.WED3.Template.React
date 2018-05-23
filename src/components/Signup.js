@@ -65,7 +65,7 @@ class Signup extends React.Component<{}, *> {
   errorForCredentials = (property, translated) => {
     const value = this.state[property];
     if(value.length <= 3) {
-      return `Bitte wählen Sie ein gültiges ${translated} welches mindestens 3 Zeichen lang ist!`;
+      return `Bitte wählen Sie ein gültiges ${translated} welches mindestens 4 Zeichen lang ist!`;
     }
     return null;
   };
@@ -73,7 +73,7 @@ class Signup extends React.Component<{}, *> {
   errorForInfo = (property, translated) => {
     const value = this.state[property];
     if(value.length <= 3) {
-      return `Bitte wählen Sie ein gültiger ${translated} welches mindestens 3 Zeichen lang ist!`;
+      return `Bitte wählen Sie ein gültiger ${translated} welches mindestens 4 Zeichen lang ist!`;
     }
     return null;
   };
@@ -132,14 +132,7 @@ class Signup extends React.Component<{}, *> {
         <Header as="h1">Bank of Rapperswil</Header>
         <Form onSubmit={this.handleSubmit}>
       <Segment stacked id="compact-form">
-        <Header as="h2">Registrieren</Header>
-        <Form.Field>
-          <Input onChange={this.handleLoginChanged}
-            icon='user'  iconPosition='left'
-            placeholder="Login"
-            value={this.state.login} />
-        </Form.Field>
-        <p>{this.errorForLogin()}</p>
+        <Header as="h2">Wilkommen auf dem Finanzportal</Header>
         <Form.Field>
           <Input onChange={this.handleFirstNameChanged}
           icon='user'  iconPosition='left'
@@ -154,6 +147,13 @@ class Signup extends React.Component<{}, *> {
           value={this.state.lastname} />
         </Form.Field>
         <p>{this.errorForLastName()} </p>
+        <Form.Field>
+          <Input onChange={this.handleLoginChanged}
+            icon='user'  iconPosition='left'
+            placeholder="Login"
+            value={this.state.login} />
+        </Form.Field>
+        <p>{this.errorForLogin()}</p>
         <Form.Field>
           <Input onChange={this.handlePasswordChanged}
           icon='lock'  iconPosition='left'

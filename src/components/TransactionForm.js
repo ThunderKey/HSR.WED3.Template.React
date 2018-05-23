@@ -1,5 +1,5 @@
 import React from "react";
-import { Form, Input, Button, Message } from 'semantic-ui-react';
+import { Header,Form, Input,Segment, Button, Message } from 'semantic-ui-react';
 import * as api from "../api";
 
 export type Props = {
@@ -55,32 +55,37 @@ class TransactionForm extends React.Component<Props, *> {
 
   render() {
     return (
+      <div>
       <Form onSubmit={this.createTransaction}>
-        <Form.Field>
-          <label>Von</label>
-          <Input disabled
-            placeholder = 'Von'
-            value={this.state.from} />
-        </Form.Field>
-        <Form.Field>
-          <label>An</label>
-          <Input onChange={this.handleToChanged}
-            placeholder = 'An'
-            value={this.state.to} />
-			<p> {this.state.toMessage} </p>
-        </Form.Field>
-        <Form.Field>
-          <label>Betrag</label>
-          <Input onChange={this.handleAmountChanged}
-            placeholder = 'Betrag'
-            value={this.state.amount} />
-			<p> {this.getErrorForAmount()}</p>
-        </Form.Field>
-		
-        {this.state.success === false && <Message negative>Es konnte nicht bezahlt werden! Bitte prüfen Sie Ihre Angaben.</Message>}
-        {this.state.success === true && <Message positive>Erfolgreich bezahlt.</Message>}
-        <Button fluid size='large' content='Bezahlen' color='teal' />
+        <Segment stacked id="compact-form">
+          <Header as="h1">New Payment</Header>
+          <Form.Field>
+            <label>Von</label>
+            <Input disabled
+              placeholder = 'Von'
+              value={this.state.from} />
+          </Form.Field>
+          <Form.Field>
+            <label>An</label>
+            <Input onChange={this.handleToChanged}
+              placeholder = 'An'
+              value={this.state.to} />
+        <p> {this.state.toMessage} </p>
+          </Form.Field>
+          <Form.Field>
+            <label>Betrag</label>
+            <Input onChange={this.handleAmountChanged}
+              placeholder = 'Betrag'
+              value={this.state.amount} />
+        <p> {this.getErrorForAmount()}</p>
+          </Form.Field>
+
+          {this.state.success === false && <Message negative>Es konnte nicht bezahlt werden! Bitte prüfen Sie Ihre Angaben.</Message>}
+          {this.state.success === true && <Message positive>Erfolgreich bezahlt.</Message>}
+          <Button fluid size='large' content='Bezahlen' color='teal' />
+          </Segment>  
       </Form>
+      </div>
     );
   };
 

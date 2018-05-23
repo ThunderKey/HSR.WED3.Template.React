@@ -11,22 +11,23 @@ class TransactionTable extends React.Component<Props, *> {
     return (
       <Table>
         <Table.Header>
-          <Table.Row>
+          <Table.Row>           
+            <Table.HeaderCell>Date</Table.HeaderCell>
             <Table.HeaderCell>Von</Table.HeaderCell>
             <Table.HeaderCell>An</Table.HeaderCell>
             <Table.HeaderCell>Betrag</Table.HeaderCell>
             <Table.HeaderCell>Total</Table.HeaderCell>
-            <Table.HeaderCell>Date</Table.HeaderCell>
           </Table.Row>
         </Table.Header>
         <Table.Body>
           {this.props.transactions.map((o, i) =>
             <Table.Row>
+              <Table.Cell>{moment(o.date).format('L')}</Table.Cell>
               <Table.Cell>{o.from}</Table.Cell>
               <Table.Cell>{o.target}</Table.Cell>
               <Table.Cell>{o.amount}</Table.Cell>
               <Table.Cell>{o.total}</Table.Cell>
-              <Table.Cell>{moment(o.date).format('L')}</Table.Cell>
+              
             </Table.Row>
           )}
         </Table.Body>
